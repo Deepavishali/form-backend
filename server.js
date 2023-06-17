@@ -27,8 +27,8 @@ mongoose
 
 //Setting Routes //
 app.use("/addform", addFormRoute)
-app.use("/editform/:id", editFormRoute)
-app.use("/deleteform/:id",deleteFormRoute)
+app.use("/editform", editFormRoute)
+app.use("/deleteform",deleteFormRoute)
 app.use("/getallforms",getallFormsroute)
 
 //Setting the PORT//

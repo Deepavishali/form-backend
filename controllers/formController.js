@@ -43,24 +43,22 @@ export const editform = async (req, res) => {
             description
         } = req.body;
 
-        const updatedForm = await Form.findOneAndUpdate(
-            { _id: req.params.id },
-            {
-                title,
-                classlevel,
-                pricing,
-                from,
-                to,
-                modeoflearning,
-                classtime,
-                description
-            },
-            { new: true }
-        );
+        const savedForm = await Form.findById(req.params.id);
 
-        if (!updatedForm) {
+        if (!savedForm) {
             return res.status(404).json({ message: "Form not found" });
         }
+
+        savedForm.title = title !== undefined ? title : savedForm.title;
+        savedForm.classlevel = classlevel !== undefined ? classlevel : savedForm.classlevel;
+        savedForm.pricing = pricing !== undefined ? pricing : savedForm.pricing;
+        savedForm.from = from !== undefined ? from : savedForm.from;
+        savedForm.to = to !== undefined ? to : savedForm.to;
+        savedForm.modeoflearning = modeoflearning !== undefined ? modeoflearning : savedForm.modeoflearning;
+        savedForm.classtime = classtime !== undefined ? classtime : savedForm.classtime;
+        savedForm.description = description !== undefined ? description : savedForm.description;
+
+        const updatedForm = await savedForm.save();
 
         res.status(200).json({ message: "Form updated successfully", form: updatedForm });
     }
@@ -72,7 +70,7 @@ export const editform = async (req, res) => {
 
 export const deleteform = async (req, res) => {
     try {
-        const { id } = req.params; // Assuming you have the form ID in the request params
+        const { id } = req.params;  // Assuming you have the form ID in the request params
 
         const deletedForm = await Form.findOneAndDelete({ _id: id }); // Find and delete the form by its ID
 
